@@ -2,19 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import date, timedelta
 
-class Feature(models.Model):
-    name = models.CharField(max_length=100)
-    details = models.CharField(max_length=200)
-
 # Arbore ierarhic flexibil (Facultate > An > Materie > ...)
 class Ierarhie(models.Model):
     nume = models.CharField(max_length=200)
     parinte = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='copii')
 
     def __str__(self):
+        # Returnează numele nodului curent
         return self.nume
 
     def get_path(self):
+        # Returnează calea de la rădăcină la nodul curent
         path = [self.nume]
         p = self.parinte
         while p:
@@ -28,6 +26,7 @@ class Lectie(models.Model):
     titlu = models.CharField(max_length=200)
 
     def __str__(self):
+        # Returnează titlul lecției și calea ierarhică
         return f"{self.titlu} ({self.nod_ierarhic.get_path()})"
 
 # Flashcard asociat unei lecții
@@ -37,7 +36,7 @@ class Flashcard(models.Model):
     raspuns = models.TextField()
 
     def __str__(self):
-        return self.intrebare[:80]
+        return self.intrebare[:80] 
 
 # Progresul utilizatorului pentru algoritmul SM-2
 class ReviewState(models.Model):

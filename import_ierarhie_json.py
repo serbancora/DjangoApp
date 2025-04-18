@@ -9,7 +9,7 @@ def importa_nod(nod_json, parinte=None):
         importa_nod(copil, obiect)
 
 def run():
-    cale = Path("ierarhie_anki.json")  # Asigură-te că fișierul e în același folder cu scriptul
+    cale = Path("ierarhie_anki.json")
     with open(cale, encoding="utf-8") as f:
         date = json.load(f)
         importa_nod(date)

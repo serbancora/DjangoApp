@@ -2,24 +2,19 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
-from .models import Feature, Flashcard, Ierarhie
+from .models import Flashcard, Ierarhie
 from .forms import FlashcardUploadForm
 
-# Create your views here.
+# Django views for handling requests and rendering templates
+
 def index(request):
+    # Home page view
     root = Ierarhie.objects.get(nume="FlashCarduri")
     context = {"ierarhie": build_tree(root)}
     return render(request, "index.html", context)
 
-def counter(request):
-    text = request.POST['text']
-    amount_of_words = len(text.split())
-    return render(request, 'counter.html',{'amount': amount_of_words})
-
-def post(request, pk):
-    return render(request, 'post.html', {'pk': pk})
-
 def register(request):
+    # User registration view
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -45,6 +40,7 @@ def register(request):
     return render(request, 'register.html')
 
 def login(request):
+    # User login view
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -61,16 +57,22 @@ def login(request):
         return render(request, 'login.html')
     
 def logout(request):
+    # User logout view
     auth.logout(request)
     return redirect('index')
 
 def courses(request):
+    # Courses page view
     return render(request, 'courses.html')
 
 def about(request):
+    # About page view
     return render(request, 'about.html')
 
 def upload_flashcards(request):
+    # Handles a form for uploading flashcards from a CSV-style text area
+    # The format is: "question;answer" for each line
+
     if request.method == 'POST':
         form = FlashcardUploadForm(request.POST)
         if form.is_valid():
@@ -88,6 +90,12 @@ def upload_flashcards(request):
         form = FlashcardUploadForm()
     return render(request, 'upload_flashcards.html', {'form': form})
 
+# This function serializes the Ierarhie model into a JSON-compatible format
+# It converts the model instance into a dictionary with the required fields
+# and recursively processes its children to build a complete tree structure
+# for the JSON response.
+# The JSON response is used to send the hierarchical data to the frontend
+# for rendering in a tree structure.
 def serialize_ierarhie(nod):
     return {
         "id": nod.id,
@@ -95,13 +103,15 @@ def serialize_ierarhie(nod):
         "copii": [serialize_ierarhie(copil) for copil in nod.copii.all()]
     }
 
-def ierarhie_json(request):
-    radacina = Ierarhie.objects.get(nume="FlashCarduri")
-    data = serialize_ierarhie(radacina)
-    return JsonResponse(data, safe=False)
-
 def build_tree(nod):
     return {
         "nume": nod.nume,
         "copii": [build_tree(c) for c in nod.copii.all()]
     }
+
+# This view returns the JSON representation of the Ierarhie model
+# starting from the root node with the name "FlashCarduri".
+def ierarhie_json(request):
+    radacina = Ierarhie.objects.get(nume="FlashCarduri")
+    data = serialize_ierarhie(radacina)
+    return JsonResponse(data, safe=False)
