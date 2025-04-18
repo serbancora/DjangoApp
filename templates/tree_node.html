@@ -1,0 +1,11 @@
+<li>
+    {{ node.nume }}
+    {% if node.copii %}
+      <ul>
+        {% for copil in node.copii %}
+          {% include 'tree_node.html' with node=copil %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+</li>
+  

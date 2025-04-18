@@ -10,8 +10,8 @@ from .forms import FlashcardUploadForm
 def index(request):
     # Home page view
     root = Ierarhie.objects.get(nume="FlashCarduri")
-    context = {"ierarhie": build_tree(root)}
-    return render(request, "index.html", context)
+    tree = build_tree_limited(root)
+    return render(request, "index.html", {"ierarhie": tree})
 
 def register(request):
     # User registration view
@@ -108,6 +108,20 @@ def build_tree(nod):
         "nume": nod.nume,
         "copii": [build_tree(c) for c in nod.copii.all()]
     }
+
+def build_tree_limited(nod, depth=0, max_depth=2):
+    if depth > max_depth:
+        return None
+    return {
+        "nume": nod.nume,
+        "id": nod.id,
+        "copii": [c for c in (build_tree_limited(child, depth+1, max_depth) for child in nod.copii.all()) if c]
+    }
+
+def view_rest(request, id):
+    root = Ierarhie.objects.get(id=id)
+    rest_of_tree = build_tree(root)  # no limit here
+    return render(request, "rest_view.html", {"ierarhie": rest_of_tree})
 
 # This view returns the JSON representation of the Ierarhie model
 # starting from the root node with the name "FlashCarduri".

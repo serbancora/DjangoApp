@@ -1,0 +1,30 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ierarhie completă</title>
+  <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <h1 style="text-align: center; margin-top: 30px;">Ierarhie completă de la: {{ ierarhie.nume }}</h1>
+  </header>
+
+  <main style="padding: 20px;">
+    <ul>
+      {{ ierarhie.nume }}
+      {% if ierarhie.copii %}
+        <ul>
+          {% for copil in ierarhie.copii %}
+            {% include 'tree_node.html' with node=copil %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </ul>
+  </main>
+
+</body>
+</html>

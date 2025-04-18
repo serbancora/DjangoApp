@@ -6,6 +6,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('courses/', views.courses, name='courses'),
     path('about/', views.about, name='about'),
+    path('ierarhie/<int:id>/', views.view_rest, name='view_rest'),
 
     # Flashcards
     path('upload-flashcards/', views.upload_flashcards, name='upload_flashcards'),

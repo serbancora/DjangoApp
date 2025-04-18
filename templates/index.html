@@ -29,7 +29,6 @@
 
   <!-- Main CSS File -->
   <link href="{% static 'assets/css/main.css' %}?v={{ now|date:'U' }}" rel="stylesheet">
-  <link href="{% static 'assets/css/dropdown.css' %}?v={{ now|date:'U' }}" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: Mentor
@@ -57,35 +56,17 @@
           <li><a href="{% url 'about' %}">About</a></li>
           <li><a href="{% url 'courses' %}">Courses</a></li>
           <li><a href="pricing.html">Pricing</a></li>
+
           <li class="dropdown">
             <a href="#"><span>FlashCarduri</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul class="{% if ierarhie.copii|length > 10 %}scrollable{% endif %}">
               {% for facultate in ierarhie.copii %}
                 <li class="dropdown">
-                  <a href="#"><span>{{ facultate.nume }}</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                  <ul class="{% if ierarhie.copii|length > 10 %}scrollable{% endif %}">
+                  <a href="#"><span>{{ facultate.nume }}</span> <i class="bi bi-chevron-right toggle-dropdown"></i></a>
+                  <ul class="{% if facultate.copii|length > 10 %}scrollable{% endif %}">
                     {% for anul in facultate.copii %}
-                      <li class="dropdown">
-                        <a href="#"><span>{{ anul.nume }}</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                        <ul class="{% if ierarhie.copii|length > 10 %}scrollable{% endif %}">
-                          {% for materie in anul.copii %}
-                            <li class="dropdown">
-                              <a href="#"><span>{{ materie.nume }}</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                              <ul class="{% if ierarhie.copii|length > 10 %}scrollable{% endif %}">
-                                {% for subiect in materie.copii %}
-                                  <li class="dropdown">
-                                    <a href="#"><span>{{ subiect.nume }}</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                                    <ul class="{% if ierarhie.copii|length > 10 %}scrollable{% endif %}">
-                                      {% for lectie in subiect.copii %}
-                                        <li><a href="#">{{ lectie.nume }}</a></li>
-                                      {% endfor %}
-                                    </ul>
-                                  </li>
-                                {% endfor %}
-                              </ul>
-                            </li>
-                          {% endfor %}
-                        </ul>
+                      <li>
+                        <a href="{% url 'view_rest' anul.id %}">{{ anul.nume }}</a>
                       </li>
                     {% endfor %}
                   </ul>
@@ -93,6 +74,7 @@
               {% endfor %}
             </ul>
           </li>
+          
           
           <li><a href="contact.html">Contact</a></li>
         </ul>
