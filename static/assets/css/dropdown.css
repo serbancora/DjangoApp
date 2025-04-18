@@ -1,0 +1,53 @@
+/* dropdown.css */
+
+/* Aplica scroll DOAR la listele mari */
+.navmenu .scrollable {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+  }
+  
+  /* Scrollbar vizibil dar discret */
+  .navmenu .scrollable::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .navmenu .scrollable::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+  }
+  
+  .navmenu .scrollable::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  /* Repară dropdown-urile să nu stea cu margini aiurea */
+  .navmenu li {
+    position: relative;
+  }
+  
+  .navmenu li ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 999;
+    display: none;
+    min-width: 220px;
+    padding: 10px 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Afișează submeniul la hover */
+  .navmenu li:hover > ul {
+    display: block;
+  }
+  
+  /* Fix pentru poziționare în lanț (submeniu în submeniu) */
+  .navmenu li ul li ul {
+    left: 100%;
+    top: 0;
+  }
+  
